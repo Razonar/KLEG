@@ -1,23 +1,32 @@
 #include <iostream>
 using namespace std;
 
-#include "graph.h"
-#include "electricity.h"
-#include "linearalgebra.h"
+#include "graph.hpp"
+#include "electricity.hpp"
+#include "matrix.hpp"
 
 int main()
 {
-    matrix A(2,3);
+    graph<int,int> grafo;
 
-    A(0,0) = 0;
-    A(0,1) = 1;
-    A(0,2) = 2;
-    A(1,0) = 3;
-    A(1,1) = 4;
-    A(1,2) = 5;
+    grafo.addVertice();
+    grafo.addVertice();
 
-    matrix aux = A.col(0);
-    cout << aux;
+    grafo.addEdge(0,1,0);
+
+    matrix<int> incidence = grafo.incidence_matrix();
+    cout << incidence;
+
+    grafo.addVertice();
+    grafo.addVertice();
+
+    grafo.addEdge(3,2,0);
+
+    incidence = grafo.incidence_matrix();
+    cout << incidence;
+
+    matrix<int> adjacency = grafo.adjacency_matrix();
+    cout << adjacency;
 
 /* AREA DE TESTES
 
