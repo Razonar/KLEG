@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef MATRIX_HPP
+#define MATRIX_HPP
 
 #include <iomanip>
 #include <vector>
@@ -16,7 +16,7 @@ private:
 public:
               matrix(int r, int c);                                        // Constructor with null matrix by default
     template <class U>
-              matrix(matrix<U>);                                          // Constructor for implicit type conversion
+              matrix(matrix<U>);                                           // Constructor for implicit type conversion
     template <class U>
     matrix<T>&operator= (matrix<U> m2);                                    // Assignment with type-conversion
     T&        operator()(int,int);                                         // Element access
@@ -145,4 +145,4 @@ ostream& operator<< (ostream &os, matrix<T> &m)
     return os;
 }
 
-#endif // MATRIX_H
+#endif // MATRIX_HPP

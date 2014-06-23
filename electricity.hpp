@@ -1,5 +1,5 @@
-#ifndef ELECTRICITY_H
-#define ELECTRICITY_H
+#ifndef ELECTRICITY_HPP
+#define ELECTRICITY_HPP
 
 #include <complex>
 #include "graph.hpp"
@@ -31,10 +31,19 @@ public:
 };
 
 class circuit {
+private:
+    graph< complex<double> , electrical_component > graph_circuit;           // Vertices hold their voltage (complex) and edges hold circuit components
 public:
-    graph< complex<double>, electrical_component > graph_circuit;
-
-
+    int nlinks;
+    bool goodGraph();
 };
 
-#endif // ELECT_H
+bool circuit::goodGraph()
+{
+    matrix<int> adj2 = graph_circuit.adjacency_matrix();
+    adj2 = adj2*adj2;
+    for(int i=0;i<nlinks;i++) if(adj2(i,i)<2) return false;
+    return graph_circuit.isConnected();
+}
+
+#endif // ELECT_HPP

@@ -1,9 +1,8 @@
 #include <iostream>
 using namespace std;
 
-#include "graph.hpp"
 #include "electricity.hpp"
-#include "matrix.hpp"
+#include "lineqns.hpp"
 
 int main()
 {
@@ -21,12 +20,20 @@ int main()
     grafo.addVertice();
 
     grafo.addEdge(3,2,0);
+    grafo.addEdge(1,3,0);
+    grafo.addEdge(0,3,0);
+    grafo.addEdge(2,1,0);
 
     incidence = grafo.incidence_matrix();
     cout << incidence;
 
     matrix<int> adjacency = grafo.adjacency_matrix();
     cout << adjacency;
+
+    cout << grafo.isConnected() << endl;
+
+    matrix<int> dualpath = adjacency*adjacency;
+    cout << dualpath;
 
 /* AREA DE TESTES
 
