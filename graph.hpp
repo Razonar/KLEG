@@ -5,7 +5,7 @@
 #include <stack>
 #include "matrix.hpp"
 
-template < class V = int >
+template < class V >
 class vertice {
 public:
     int ID;
@@ -14,7 +14,7 @@ public:
     vertice(int i, V in):ID(i),info(in){}
 };
 
-template < class V = int, class E = int >
+template < class V , class E >
 class edge {
 public:
     int ID;
@@ -28,8 +28,10 @@ template < class V = int , class E = int >
 class graph {
 private:
     vector< vertice<V> > vertices;
-    vector< edge<E> > edges;
+    vector< edge<V,E> > edges;
 public:
+    int nEdges();
+    int nVertices();
     int addVertice(V);                                      // Add vertice by it's info (ID is automatic)
     int addEdge(int,int,E);                                 // Add edge by it's end vertices' IDs and link (ID is automatic), multigraph not allowed
     matrix<int> incidence_matrix();                         // Considering a directed graph
@@ -37,7 +39,14 @@ public:
     bool isConnected();                                     // Considering an undirected graph, uses adjacency matrix.
 };
 
+
 /*===================================================================================================================*/
+
+template < class V , class E >
+int graph<V,E>::nEdges() { return edges.size(); }
+
+template < class V , class E >
+int graph<V,E>::nVertices() { return vertices.size(); }
 
 template < class V , class E >
 int graph<V,E>::addVertice(V info = 0)
@@ -47,9 +56,10 @@ template < class V , class E >
 int graph<V,E>::addEdge(int a, int b, E info)
 {
     if(a>=vertices.size()||b>=vertices.size()) throw "Target edge endpoint not found";
+    if(a==b) throw "Loops are not allowed";
     for(int i=0;i<edges.size();i++)
         if((edges[i].end1.ID==a && edges[i].end2.ID==b)||(edges[i].end1.ID==b && edges[i].end2.ID==a)) throw "Multigraph is not allowed";
-    edges.push_back(edge<E>(edges.size(),vertices[a],vertices[b],info));
+    edges.push_back(edge<V,E>(edges.size(),vertices[a],vertices[b],info));
     return edges.size()-1;
 }
 

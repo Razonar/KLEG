@@ -6,37 +6,29 @@ using namespace std;
 
 int main()
 {
-    graph<int,int> grafo;
+    try // Testing area ;-)
+    {
+    circuit test;
 
-    grafo.addVertice();
-    grafo.addVertice();
+    test.addComponent(0,1,resistor(1));
+    test.addComponent(1,2,resistor(1));
+    test.addComponent(2,0,resistor(1));
 
-    grafo.addEdge(0,1,0);
 
-    matrix<int> incidence = grafo.incidence_matrix();
-    cout << incidence;
+    cout << "  -- Circuit Stats -- " << endl << endl;
+    cout << " No of Components: " << test.nComponents() << endl;
+    cout << " Circuit is well connected: " << (test.goodGraph() ? "yes":"no") << endl;
 
-    grafo.addVertice();
-    grafo.addVertice();
 
-    grafo.addEdge(3,2,0);
-    grafo.addEdge(1,3,0);
-    grafo.addEdge(0,3,0);
-    grafo.addEdge(2,1,0);
+    }
+    catch(char const * what)
+    {
+        cout << what << endl;
+    }
+    catch(...)
+    {
+        cout << "Unknown shit" << endl;
+    }
 
-    incidence = grafo.incidence_matrix();
-    cout << incidence;
-
-    matrix<int> adjacency = grafo.adjacency_matrix();
-    cout << adjacency;
-
-    cout << grafo.isConnected() << endl;
-
-    matrix<int> dualpath = adjacency*adjacency;
-    cout << dualpath;
-
-/* AREA DE TESTES
-
-*/
     return 0;
 }
