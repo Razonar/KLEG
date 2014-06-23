@@ -1,0 +1,318 @@
+\documentclass{comjnl}
+
+\usepackage{amsmath}
+
+%\copyrightyear{2014} \vol{00} \issue{0} \DOI{000}
+
+\begin{document}
+
+
+\title[Kirchhoff's laws for Linear Equations over a circuit modelled in Graphs]{Kirchhoff's laws for Linear Equations over a circuit modelled in Graphs}
+\author{Victor Chaves}
+\affiliation{Military Institute of Engineering, Rio de Janeiro, Brazil} \email{victor.slosilojn@gmail.com}
+
+\shortauthors{V. Chaves}
+
+%\received{00 January 2009}
+%\revised{00 Month 2009}
+
+
+%\category{C.2}{Computer Communication Networks}{Computer Networks}
+%\category{C.4}{Performance of Systems}{Analytical Models}
+%\category{G.3}{Stochastic Processes}{Queueing Systems}
+%\terms{Internet Technologies, E-Commerce}
+\keywords{Graphs, Linear Algebra, Electricity Circuits}
+
+
+\begin{abstract}
+Here will go the abstract
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+\label{Sec:Intro}
+
+By it's very definition, electrical circuits can be well modelled by graphs. The vertices may carry the nodes' voltage information if we set a ground referential and the edges represent the electrical components, so they can carry their impedance.
+
+We shall see how common graph auxiliary data structures can be used to find the currents in each electrical component, mainly using matrix operations. The generalized Ohm's Law gives us a linear equation to be solved involving these matrices.
+
+
+
+\subsection{Electrical Circuits and Components}
+\label{Sec:Circuits&Components}
+
+\subsection{Kirchhoff's Laws}
+\label{Sec:Kirchhoff}
+
+\subsection{Complex Numbers and Phasor Notation}
+\label{Sec:Phasors}
+
+\subsection{Generalized Ohm's Law}
+\label{Sec:Ohm}
+
+\section{Graph Modeling}
+\label{Sec:Graph}
+
+
+\section{Performance measures of interest to the SB and to the seller}  \label{Performance}
+
+
+\section{Test}
+
+
+\section{Price dependent bidding} \label{Price-Dependent}
+
+In many cases the current price attained by a good offers useful
+information about its valuation, and about the situation of other
+bidders. Thus a model with bidding rates dependent on price was
+analysed in \cite{gelenbe06}. Here we extend this approach to the
+behaviour of both the SB and the other bidders.
+
+We use $\beta(l)$ and $\lambda(l)$ to denote the bidding rates
+when the price is at level $l$ for the SB and the other bidders,
+respectively. Likewise, $\delta(l)$ will be the seller's decision
+rate when price is at level  $l$. By a simple extension of the
+previous model, the steady state probabilities for the system
+satisfy
+\begin{align} \label{eq:PriceDependentBidding}
+P(O(1))&= \frac{n\lambda(0)}{(n-1)\lambda({1}) + \beta(1) + \delta(1) } P(0),  \\
+P(R(1))&= \frac{\beta(0)}{n \lambda(1) + \delta(1)} P(0) ,\nonumber \displaybreak[0]\\
+P(O(l))&= \frac{(n-1) \lambda({l-1})}{(n-1)\lambda(l) +
+\beta(l)+\delta(l)} P(O(l-1)) \nonumber\\
+&\quad + \frac{n \lambda({l-1})}{(n-1)\lambda(l) + \beta(l) + \delta(l)} P(R(l-1)) , \,\nonumber\\
+&\qquad \qquad \qquad \qquad\qquad\qquad 2\leq l \leq v-1 , \nonumber \displaybreak[0] \\
+P(R(l)) &= \frac{\beta(l-1)}{n \lambda(l) + \delta(l)} P(O(l-1)) , \quad 2\leq l \leq v-1 ,\nonumber\displaybreak[0] \\
+P(O(l)) &= \frac{(n-1)\lambda(l-1)}{\delta(l)} P(O(l-1)) \nonumber \\
+&\quad + \frac{n\lambda(l-1)}{\delta(l)} P(R(l-1)) , \quad  l=v , \nonumber \displaybreak[0]\\
+P(R(l)) &= \frac{\beta(l-1)}{\delta(l)} P(O(l-1)) , \quad l=v ,\nonumber \displaybreak[0]\\
+P(A(O,l)) &= \frac{\delta(l)}{r} P(O(l)) ,\quad 1\leq l \leq v,
+\nonumber \displaybreak[0]\\
+P(A(R,l)) &= \frac{\delta(l)}{r} P(R(l)) ,\quad 1\leq l \leq v,
+\nonumber \displaybreak[0]\\
+P(0) &= \frac{r}{n\lambda(0)+\beta(0)} \sum_{U=O,R}\sum_{l=1}^v P(A(U,l)), \nonumber\\
+1 &=P(0)+\sum_{U=0,R}\sum_{l=1}^v \big[P(U(l))+P(A(U,l))\big].
+\nonumber
+\end{align}
+
+We will first give the general solutions for this system, and then
+look at a plausible example of forms that the dependent functions
+$\lambda, \beta$ and $\delta$ might assume. Suppose, following
+similar approach in (\ref{eq:1_3}), we let
+\begin{align*}
+P(O(l)) &= H(l) P(0),  \quad 1\leq  l \leq v, \\
+P(R(l)) &= G(l) P(0), \quad 1 \leq l \leq v.
+\end{align*}
+We can then express the second order recurrence relations in
+$H(l)$:
+\begin{equation}\label{eq:recurr_PriceDep}
+H(l) = c_1(l) H(l-1) + c_2(l) H(l-2), \quad 3 \leq l \leq v-1,
+\end{equation}
+where the coefficients $c_1$ and $c_2$ are
+\begin{align}\label{eq:recurr_PriceDep_coeff}
+c_1(l) &=
+\frac{(n-1)\lambda(l-1)}{(n-1)\lambda(l)+\beta(l)+\delta(l)} \, ,\\
+c_2(l) &= \frac{n\lambda(l-1)
+\beta(l-2)}{\left((n-1)\lambda(l)+\beta(l)+\delta(l)\right) } \nonumber\\
+&\quad \times \frac{1}{\left( n\lambda(l-1)+\delta(l-1)\right)} \,
+,\nonumber
+\end{align}
+and, the initial valuations will satisfy
+\begin{align}
+H(1) &=
+\frac{n\lambda(0)}{(n-1)\lambda(1)+\beta(1)+\delta(1)} \\
+H(2) &= \frac{1}{(n-1)\lambda(2)+\beta(2)+\delta(2)} \nonumber\\
+&\quad\times\left[\frac{n(n-1)\lambda(0)\lambda(1)}{(n-1)\lambda(1)+\beta(1)+\delta(1)}+
+\frac{n\lambda(1)\beta(0)}{n\lambda(1)+\delta(1)} \right]
+\nonumber.
+\end{align}
+Clearly, the difference equations (\ref{eq:recurr_PriceDep}) are
+linear homogeneous with variable coefficients
+(\ref{eq:recurr_PriceDep_coeff}), and, hence, the solution for
+$H(l)$ can be expressed in closed form, purely in terms of the
+coefficients\cite{popenda87,mallik97,boese02}. First, define a
+matrix:
+\begin{equation}
+\mathbf{M}_l \equiv \begin{bmatrix}
+c_2(l) & c_1(l) \\
+c_1(l+1)c_2(l) & c_2(l+1)+c_1(l+1)c_1(l)
+\end{bmatrix}.
+\end{equation}
+Then, the solution sequence $\{H(l): 1\leq l \leq v-1\}$, can be
+represented as a product of matrices $\{\mathbf{M}_l\}$ and the
+initial valuations:
+\begin{align}\label{eq:PriceDependent_Hl}
+\begin{bmatrix} H(2j+1)\\
+H(2j+2) \end{bmatrix} &= \mathbf{M}_{2j+1} \mathbf{M}_{2j-1}
+\cdots \mathbf{M}_{3}
+\begin{bmatrix}H(1)\\
+H(2) \end{bmatrix} \\
+&= \prod_{i=1}^{j} \mathbf{M}_{2i+1}
+\begin{bmatrix}H(1)\\
+H(2) \end{bmatrix} , \; 0\leq j \leq \left\lfloor\frac{v-2}{2}
+\right\rfloor\nonumber .
+\end{align}
+
+Solving the above equation yields a set of two $H(l)$, one
+corresponding to an odd $l$ and another to an even, for every $j$.
+However, the solutions will not hold at the boundary $l=v$,
+because it involves a different set of coefficients as given in
+(\ref{eq:PriceDependentBidding}). Thus, the boundary solution will
+be distinct and dependent on the previous two valuations:
+\begin{equation}\label{eq:PriceDependent_Hl_Boundary}
+\begin{split}
+H(v) &= \frac{(n-1)\lambda(v-1)}{\delta(v)} H(v-1) \\
+&\quad +
+\frac{n\lambda(v-1)\beta(v-2)}{\delta(v)\delta(v-1)}H(v-2).
+\end{split}
+\end{equation}
+
+Similarly, the solutions for $G(l)$ will be
+\begin{equation} \label{eq:PriceDependent_Gl}
+\begin{split}
+\begin{bmatrix}  G(2j+2)\\
+G(2j+3) \end{bmatrix} &= \mathbf{N}_{2j+2} \prod_{i=1}^{j}
+\mathbf{M}_{2i+1}
+\begin{bmatrix} H(1)\\
+H(2)\end{bmatrix} , \\
+&\qquad\qquad\qquad\qquad  0\leq j \leq \left\lfloor\frac{v-3}{2}
+\right\rfloor ,
+\end{split}
+\end{equation}
+where the matrix and the coefficients are
+\begin{equation}
+\mathbf{N}_l \equiv \begin{bmatrix} d(l) & 0 \\
+0 & d(l+1)\end{bmatrix},  \textrm{ and }  d(l) =
+\frac{\beta(l-1)}{n\lambda(l)+\delta(l)}\,.
+\end{equation}
+Again, at the boundaries $l=1$ and $l=v$, the solutions will be
+different:
+\begin{align}\label{eq:PriceDependent_Gl_Boundary}
+G(1) &= \frac{\beta(0)}{n\lambda(1)+\delta(1)}\,,\\
+G(v) &= \frac{\beta(v-1)}{\delta(v)} H(v-1) . \nonumber
+\end{align}
+
+\begin{figure}
+\centering
+%\includegraphics[width=3in]{ExpPayoffPerTime_PriceDependent.eps}
+\caption{Payoff per unit time in the price dependent bidding
+model, against nominal bid rate $\beta_0$ for various pressure
+coefficients. Here $n=10$, $\lambda_0=1.0$, $r=1$, $\delta=0.5$,
+and $\sigma=0$.}\label{fig:PriceDependentBid}
+\end{figure}
+
+The solutions above are general, and will hold for all price
+dependent functions. Suppose now, that the dependencies are such
+that $\lambda$ and $\beta$ will decrease while $\delta$ will
+increase, with the price level $l$. Specifically, let a {\em
+pressure coefficient} $\kappa\geq 0$ \cite{hillier64} to represent
+the degree to which the attained price discourages bidding, while
+$\sigma\geq 0$ represents the effect of higher prices on the
+seller's tendency to sell:
+\begin{align} \label{eq:PriceDependentBidding_Functions}
+\beta(l) &= \frac {\beta_0}{(l+1)^{\kappa} } \,, \quad l \geq 0 , \\
+\lambda(l) &= \frac{\lambda_0}{(l+1)^{\kappa}} \,, \quad l \geq 0
+,\nonumber \\
+\delta(l) &= l^\sigma\delta_0 , \quad l \geq 1 ,\nonumber
+\end{align}
+where $\beta_0$, $\lambda_0$ and $\delta_0$ are fixed nominal
+rates. Although we use the same $\kappa$ for the SB and other
+bidders, it is easy to relax this restriction. When $\kappa=1$, we
+have the case of ``harmonic discouragement'', and if $\kappa=0$
+the bidders are insensitive to price, and consequently, the whole
+system reduces to the previously solved model~(\ref{eq:1}).
+
+Now, for functionals of form
+(\ref{eq:PriceDependentBidding_Functions}), the explicit solutions
+for $H(l)$ will follow (\ref{eq:PriceDependent_Hl}) and
+(\ref{eq:PriceDependent_Hl_Boundary}), where the coefficients
+$c_1$ and $c_2$ are
+\begin{align}
+c_1(l) &=
+\left(\frac{l+1}{l}\right)^\kappa \frac{(n-1)\lambda_0} {(n-1)\lambda_0 + \beta_0 + l^\sigma(l+1)^\kappa\delta_0}   \,,\\
+c_2(l) &= \left(\frac{l+1}{l-1}\right)^\kappa
+\frac{n\lambda_0\beta_0}{\left((n-1)\lambda_0+\beta_0+l^\sigma(l+1)^\kappa
+\delta_0 \right) } \nonumber \\
+&\quad \times \frac{1}{\left(n\lambda_0 + l^\kappa (l-1)^\sigma
+\delta_0 \right)}  \,,\nonumber
+\end{align}
+and the initial valuations become
+\begin{align}
+H(1) &=
+\frac{n\lambda_0 2^\kappa}{(n-1)\lambda_0+\beta_0+2^\kappa\delta_0} \,,\\
+H(2) &= \frac{3^\kappa}{(n-1)\lambda_0 + \beta_0 + 2^\sigma
+3^\kappa \delta_0 }\nonumber\\
+&\quad \times\left[\frac{n(n-1){\lambda_0}^2}{(n-1)\lambda_0 +
+\beta_0 + 2^\kappa \delta_0}+ \frac{n\lambda_0 \beta_0}
+{n\lambda_0 + 2^\kappa\delta_0 } \right] \nonumber.
+\end{align}
+For $G(l)$, the solutions will follow the general forms
+(\ref{eq:PriceDependent_Gl}) and
+(\ref{eq:PriceDependent_Gl_Boundary}), where the coefficient
+\begin{equation}
+d(l) = \left(\frac{l+1}{l}\right)^\kappa \frac{\beta_0}{n\lambda_0
++ l^\sigma(l+1)^\kappa \delta_0} \,,
+\end{equation}
+and the initial valuation is $G(1) = \frac{2^\kappa \beta_0}
+{n\lambda_0 + 2^\kappa\delta_0 }$.
+
+
+The examples in Figure~\ref{fig:PriceDependentBid} illustrate the
+effect of $\kappa$ on the expected payoff per unit time for the
+SB. We see that the pressure coefficient does not make a
+difference for relatively small bid rates $\beta_0$, and that a
+higher coefficient fetches a better payoff rate at higher bid
+rates. Also, a small increase in $\kappa$ from $0$ to $0.2$ yields
+a bigger difference in payoff rates, than an equal-sized increase
+from $0.8$ to $1.0$.
+
+
+\section{Conclusions} \label{Conclusions}
+In this paper we have considered auctions in which bidders make
+offers that are sequentially increasing in value by a unit price
+in order to minimally surpass the previous highest bid, and
+modelled them as discrete state-space random processes in
+continuous time. Analytical solutions are obtained and measures
+that are of interest to the SB are derived.
+
+The measures that can be computed in this way include the SB's
+probability of winning the auction, its expected savings with
+respect to the maximum sum it is willing to pay, and the average
+time that the SB spends before it can make a purchase. An
+extension of the model that incorporates price-dependent
+behaviours of the agents has also been presented.
+
+The model allows us to quantitatively characterise intuitive and
+useful trade-offs between improving the SB's chances of buying a
+good quickly, and the price that it has to pay, in the presence of
+different levels of competition from the other bidders.
+
+
+There are interesting extensions and applications of these models
+that can be considered, such as the behaviour of bidders and
+sellers that may have time constraints for making a purchase, and
+the possibility of the SB's moving among different auctions so as
+to optimise measures which represent its self-interest. Another
+interesting area of study may be to examine bidders who are
+``rich'' and are willing to drive away rivals at any cost, and who
+may create different auction environments for bidders that have
+significantly different levels of wealth. Yet another area of
+interest concerns auctions where items are sold in batches of
+varying sizes, with prices which depend on the number of items
+that are being bought.
+
+\ack{This research was undertaken as part of the ALADDIN
+(Autonomous Learning Agents for Decentralised Data and Information
+Networks) project and is jointly funded by a BAE Systems and EPSRC
+(Engineering and Physical Research Council) strategic partnership
+(EP/C548051/1).}
+
+
+\nocite{*}
+
+\bibliographystyle{compj}
+\bibliography{ModellingBidders}
+
+
+\end{document}
