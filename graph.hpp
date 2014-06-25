@@ -5,7 +5,7 @@
 #include <stack>
 #include "matrix.hpp"
 
-template < class V >
+template < class V = int >
 class vertice {
 public:
     int ID;
@@ -14,26 +14,26 @@ public:
     vertice(int i, V in):ID(i),info(in){}
 };
 
-template < class V , class E >
+template < class E = int >
 class edge {
 public:
     int ID;
-    vertice<V> end1, end2;
+    int IDstart, IDend;
     E link;
 
-    edge(int i,vertice<V> a,vertice<V> b, E l):ID(i),end1(a),end2(b),link(l){}
+    edge(int i,int a,int b, E l):ID(i),IDstart(a),IDend(b),link(l){}
 };
 
 template < class V = int , class E = int >
 class graph {
 private:
     vector< vertice<V> > vertices;
-    vector< edge<V,E> > edges;
+    vector< edge<E> > edges;
 public:
     int nEdges();
     int nVertices();
-    int addVertice(V);                                      // Add vertice by it's info (ID is automatic)
-    int addEdge(int,int,E);                                 // Add edge by it's end vertices' IDs and link (ID is automatic), multigraph not allowed
+    void addVertice(V,int);                                      // Add vertice by it's info (ID is automatic)
+    void addEdge(int,int,E,int);                                 // Add edge by it's end vertices' IDs and link (ID is automatic), multigraph not allowed
     matrix<int> incidence_matrix();                         // Considering a directed graph
     matrix<int> adjacency_matrix();                         // Considering an undirected graph
     bool isConnected();                                     // Considering an undirected graph, uses adjacency matrix.
@@ -49,18 +49,24 @@ template < class V , class E >
 int graph<V,E>::nVertices() { return vertices.size(); }
 
 template < class V , class E >
-int graph<V,E>::addVertice(V info = 0)
-{ vertices.push_back(vertice<V>(vertices.size(),info)); return vertices.size()-1;}
+void graph<V,E>::addVertice(V info = 0, int id=-1)
+{
+    if(id<0) id = vertices.size();
+    vertices.push_back(vertice<V>(id,info));
+}
 
 template < class V , class E >
-int graph<V,E>::addEdge(int a, int b, E info)
+void graph<V,E>::addEdge(int e1, int e2, E info = 0, int id=-1)
 {
-    if(a>=vertices.size()||b>=vertices.size()) throw "Target edge endpoint not found";
-    if(a==b) throw "Loops are not allowed";
+    if(id<0) id = edges.size();
+    bool e1_exists=false, e2_exists=false;
+    for(int i=0;i<vertices.size();i++) if(vertices[i].ID==e1) { e1_exists=true; break; }
+    for(int i=0;i<vertices.size();i++) if(vertices[i].ID==e2) { e2_exists=true; break; }
+    if(!e1_exists || !e2_exists) throw "Edge insertion Endpoint not found";
+    if(e1==e2) throw "Loops are not allowed";
     for(int i=0;i<edges.size();i++)
-        if((edges[i].end1.ID==a && edges[i].end2.ID==b)||(edges[i].end1.ID==b && edges[i].end2.ID==a)) throw "Multigraph is not allowed";
-    edges.push_back(edge<V,E>(edges.size(),vertices[a],vertices[b],info));
-    return edges.size()-1;
+        if((edges[i].IDstart==e1 && edges[i].IDend==e2)||(edges[i].IDstart==e2 && edges[i].IDend==e1)) throw "Multigraph is not allowed";
+    edges.push_back(edge<E>(id,e1,e2,info));
 }
 
 template < class V , class E >
@@ -69,8 +75,8 @@ matrix<int> graph<V,E>::incidence_matrix()
     matrix<int> incidence(vertices.size(),edges.size());
     for(int i=0,a,b; i<edges.size(); i++)
     {
-        a = edges[i].end1.ID;
-        b = edges[i].end2.ID;
+        for(int a=0;vertices[a].ID!=edges[i].IDstart;a++)
+        for(int b=0;vertices[b].ID!=edges[i].IDend;b++)
         incidence(a,i) = -1;
         incidence(b,i) = +1;
     }
@@ -83,8 +89,8 @@ matrix<int> graph<V,E>::adjacency_matrix()
     matrix<int> adj(vertices.size(),vertices.size());
     for(int i=0,a,b; i<edges.size(); i++)
     {
-        a = edges[i].end1.ID;
-        b = edges[i].end2.ID;
+        for(int a=0;vertices[a].ID!=edges[i].IDstart;a++)
+        for(int b=0;vertices[b].ID!=edges[i].IDend;b++)
         adj(a,b) = adj(b,a) = 1;
     }
     return adj;
@@ -93,6 +99,8 @@ matrix<int> graph<V,E>::adjacency_matrix()
 template < class V , class E >
 bool graph<V,E>::isConnected()
 {
+    if(vertices.size()==0) return true;
+
     matrix<int> adjacency = adjacency_matrix();
     bool discovered[vertices.size()]; for(int i=0;i<vertices.size();i++) discovered[i]=false;
     stack<int> DFSstack; DFSstack.push(0);

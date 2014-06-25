@@ -6,20 +6,23 @@
 
 class RLC {
 private:
-    complex<double> conductance;
+    complex<double> admittance;
 public:
-    RLC(double ir, double ii):conductance(ir,ii){}
+    RLC(double ir, double ii):admittance(ir,ii){}
 };
 
 class resistor : public RLC {
 private:
 
 public:
-    resistor(double r):RLC(r,0){}
+    resistor(double r):RLC(1/r,0){}
 };
+
+    enum s_type {current,voltage};
 
 class source {
 private:
+    s_type source_type;
     double amplitude;
     double frequency;
     double phase;
@@ -42,30 +45,25 @@ class wire {
 
 class circuit {
 private:
-    graph< complex<double> , RLC > RLCs;           //
-    vector< source > sources;
-    vector< wire > wires;
+    graph< complex<double> , RLC >  RLCgraph;
+    vector< vector<int> >           equivalence_table;
+    vector< edge<source> >          sources;
+    vector< edge<wire> >            wires;
 public:
     int nComponents();
-    bool goodGraph();
-    void addComponent(int,int,RLC);
+    void addRLC(int,int,double,double);
+    void addSource(int,int,double,double,double);
 };
 
 
 /*===================================================================================================================*/
 
 int circuit::nComponents()
-{ return RLCs.nEdges(); }
+{ return RLCgraph.nEdges() + sources.size() + wires.size(); }
 
-bool circuit::goodGraph()
-{
+void circuit::addRLC(int e1, int e2, double G, double B)
+{ RLCgraph.addEdge(e1,e2,RLC(G,B)); }
 
-}
-
-void circuit::addComponent(int a, int b, RLC link)
-{
-
-}
 
 
 
