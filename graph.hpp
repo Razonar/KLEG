@@ -37,6 +37,7 @@ public:
     void addEdge(int,int,int,E);                            // Add edge by it's end vertices IDs and link info
     matrix<int> adjacency_matrix();                         // Considering an undirected multigraph
     bool isConnected();                                     // Considering an undirected multigraph, uses adjacency matrix, performing DFS
+    matrix<int> incidence_matrix();
 };
 
 
@@ -105,5 +106,18 @@ bool graph<V,E>::isConnected()
     return true;
 }
 
+template < class V , class E >
+matrix<int> graph<V,E>::incidence_matrix()
+{
+    matrix<int> incidence(this->vertices.size(),this->edges.size());
+    for(int i=0,a,b; i<this->edges.size(); i++)
+    {
+        for(a=0;this->vertices[a].ID!=this->edges[i].IDstart;a++);
+        for(b=0;this->vertices[b].ID!=this->edges[i].IDend;b++);
+        incidence(a,i) = -1;
+        incidence(b,i) = +1;
+    }
+    return incidence;
+}
 
 #endif // GRAPH_HPP

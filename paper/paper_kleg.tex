@@ -112,7 +112,7 @@ $$ A^T\vec{p}=-\vec{v} \Rightarrow \mbox{KVL}  $$
 First we prove the linear equation. Let $b=(u,v)$ be the k-th edge, going from $u$ to $v$:
 $$(A^T\vec{p})_k = \sum a_{jk}p_j = \vec{p}_u - \vec{p}_v = \vec{v}_b = v_k$$
 Now, any cyclic path results in a null linear combination in the column space of $A^T$. Hence, the voltage drop of the path is a null combinations of the node potentials along the path:
-$$ \sum_{cyclic}v_k = - \sum_{cyclic} (A^T\vec{p})_k $$
+$$ \sum_{cyclic}v_k = - \sum_{cyclic} (A^T\vec{p})_k  = - \sum_{cyclic} (A^T)_k \cdot \vec{p} = \vec{0} \cdot \vec{p} = 0$$
 \end{proof}
 
 In order to use the Generalized Ohm's Law we must separate the voltage and current sources from the circuit. We can do this by defining the voltage drop vector $\vec{v}_{d}$ and voltage source contribution vector $\vec{v}_{s}$. In a similar fashion we define $\vec{i}_{d}$ and $\vec{i}_{s}$ so that:
@@ -144,7 +144,8 @@ Combining \ref{KCL:matrix}, \ref{KVL:matrix} and \ref{GOL:matrix} we have the co
 
 The incredulous reader may expand the equation as follows:
 $$ Z\vec{i}_d + A^T\vec{p} = \vec{v}_d - \vec{v} = \vec{v}_s $$
-$$ A\vec{i}_d =  $$
+$$ A\vec{i}_d = \wrong $$
+% Finish this before restart doing the implementation
 
 \section{Numerical Examples}
 

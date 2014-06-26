@@ -3,8 +3,6 @@
 
 #include <complex>
 #include "graph.hpp"
-#include "digraph.hpp"
-#include "equiv.hpp"
 
 enum ec_type {RLC,vsource,csource};
 
@@ -43,7 +41,6 @@ public:
 class circuit {
 private:
     graph<char,electrical_component> circuit_graph;
-    digraph< complex<double>,complex<double> > modelled_graph;
 public:
     int nComponents();
     bool goodCircuit();

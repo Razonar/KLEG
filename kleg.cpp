@@ -21,6 +21,7 @@ int main()
     " -- Circuit Stats -- " << endl << endl <<
     " Number of Components: " << test.nComponents() << endl <<
     " Circuit is closed: " << (test.goodCircuit()? "yes":"no") <<
+
     endl;
 
 
