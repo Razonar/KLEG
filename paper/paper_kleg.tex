@@ -1,6 +1,7 @@
 \documentclass{comjnl}
 
 \usepackage{amsmath}
+\usepackage{amsfonts}
 
 %\copyrightyear{2014} \vol{00} \issue{0} \DOI{000}
 
@@ -25,7 +26,7 @@
 
 
 \begin{abstract}
-Graphs and circuits are so closely related that an undergraduate course about electricity networks that does not mention it's graph modelling should be considered a scientific blasphemy. Here are presented the basic aspects of this relationship, linking the linear behaviour of generalized Ohm's Law and the linear model of Kirchoff's Law using some residual linear algebra born from graph's incidence matrix. In fact, so little graph theory is required that not knowing graph theory is a poor excuse to ignore this approach. Some simple sample circuits are analysed using a software derived directly from the model discussed and it's source code is made available so that anyone can try their own tests.
+Graphs and circuits are so closely related that an undergraduate course about electricity networks that does not mention graph modelling should be considered a scientific blasphemy. Here are presented the basic aspects of this relationship, linking the linear behaviour of generalized Ohm's Law and the linear model: Kirchoff's Law using some residual linear algebra born from graph's incidence matrix. In fact, so little graph theory is required that not knowing graph theory is a poor excuse to ignore this approach. Some simple sample circuits are analysed using a software derived directly from the model discussed and it's source code is made available so that anyone can try their own tests.
 \end{abstract}
 
 \maketitle
@@ -34,42 +35,116 @@ Graphs and circuits are so closely related that an undergraduate course about el
 \section{Introduction}
 \label{Sec:Intro}
 
-By it's very definition, electrical circuits can be well modelled by graphs. The vertices may carry the nodes with voltage information if we set a ground referential and the edges may represent the electrical components, carrying their impedance.
+%By it's very definition, electrical circuits can be well modelled by graphs. The vertices may carry the nodes with voltage information if we set a ground referential and the edges may represent the electrical components, carrying their impedance.
 
-\subsection{Electrical Circuits and Components}
-\label{Sec:Circuits&Components}
+\section{Let there be Vectors and Laws}
+Let $\mathcal{C}$ be an electrical circuit network of $n$ nodes and $m$ branches containing electrical connections, e.g. wires, resistors and batteries. Each node has an electrical potential, and each branch is associated with the potential difference between it's terminals and the current which goes through the electrical component in the branch.
 
-% Talk about resistors, inductors and capacitors
+Fixing the current directions along the circuit, we may define uniquely the currents and voltage vectors:
+\begin{definition}[Branch Current Vector]
+$$ \vec{i} \in \mathbb{C}^m$$ where $\vec{i}_k$ is the current going through the k-th branch in the prefixed direction.
+\end{definition}
+\begin{definition}[Branch Voltage Vector]
+$$ \vec{v} \in \mathbb{C}^m$$ where $\vec{v}_k$ is the potential drop along the k-th branch in the prefixed direction.
+\end{definition}
+\begin{definition}[Node Potential Vector]
+$$ \vec{p} \in \mathbb{C}^n$$ where $\vec{p}_k$ is the potential on each node, independent of the prefixed directions on the circuit.
+\end{definition}
 
-\subsection{Kirchhoff's Laws}
-\label{Sec:Kirchhoff}
+One simple observation is the relation between the voltage vector and the potential vector. If $b=(u,v)$ is a branch and the prefixed direction for this branch is from node $u$ to node $v$, then $\vec{v}_b = \vec{p}_u - \vec{p}_v$. 
 
-% Just talk about energy conservation
+The Ohm's Law in the complex form gives the relation between the voltage and the current on each RLC branch:
+\begin{axiom}[Ohm]
+$$V = ZI $$
+\end{axiom}
+where $V$ is the voltage on the terminals of an electrical component, $I$ is the current passing through it and $Z$ is the impedance associated with the component. 
 
-\subsection{Complex Numbers and Phasor Notation}
-\label{Sec:Phasors}
+Of course these relations are the model of the circuit properties, but we need behaviour laws so we can predict the properties of a given circuit. These laws can be intuitively deduced from energy conservation principles: nodes do not leak or storage charges and cyclic paths can't generate work.
 
-% Time to present complex impedance, current and voltage
+These assumptions are not always perfectly satisfied by electrical networks, but are in most cases enough to well approximate the behaviour of electrical charges in the system. The reason behind these assumptions can be naively explained by saying that if one of these were not true, the system wouldn't be physically stable.
 
-\subsection{Generalized Ohm's Law}
-\label{Sec:Ohm}
+Finally, we can state the famous Kirchhoff's Laws that together with Ohm's Law describe the electrical system in a totally linear model (although Kirchhoff's may not seem linear at first glance):
+\begin{axiom}[Current Law]
+The sum of all currents entering a node must be equal to the sum of all currents leaving the node.
+\end{axiom}
+\begin{axiom}[Voltage Law]
+The sum of branch voltages along a cyclic path must be equal to zero.
+\end{axiom}
 
+The Kirchhoff's Current Law (KCL) is the formal axiom behind our first assumption and the Kirchhoff's Voltage Law (KVL) is behind the second. They are so intuitive that most people don't stare with proper wonder and awe the linear aspect given by the words "sum of all" or "sum of ... along"
 
+While dealing with linear systems and models we will obviously get support from linear algebra. One mathematical structure related to networks and mappings that is also related to matrices is the graph, and that's the whole purpose of this writing.
 
-\section{Graph Modeling}
-\label{Sec:Graph}
-% Reformulate Kirchhoff's laws and Ohm's laws
-Let $A$ be the circuit's incidence matrix, $\vec{i}$ the current vector, $\vec{v}$" the voltage vector and $\vec{p}$ the potential vector. The Kirchhoff Laws are now written:
-\begin{itemize}
-\item \emph{Node Conservation:} $A\vec{i} = \vec{0}$
-\item \emph{Path Conservation:} Satisfied if by definition $A^T\vec{p}=-\vec{v}$
-\end{itemize}
+\section{Kirchhoff enters the Matrix}
+If we choose to represent electrical circuit networks under a set of prefixed current directions, then we are intuitively representing the electrical network as a directed multi-graph. "Directed" because the edges of the graph have a defined direction and "multi" because more than one edge linking two vertices is allowed (useful because electrical components in parallel).
 
-Being $C$ the conductance matrix of this circuit, the Ohm's Law is written as:
-$$ \vec{i} = C\vec{v} $$
+The reader unfamiliar with graphs need not to worry, since graph's only purpose here is to formalize an important auxiliary data structure of networks called incidence matrix.
 
-And hence, the 3 laws combined gives the complete linear system:
-$$ ACA^T\vec{p}=\vec{0} $$
+\begin{definition}[Incidence Matrix]
+Let $G(V,E)$ be a graph having $V$ as the set of vertices and $E$ as the set of edges. The incidence matrix $I(G)$ of this graph is given by:
+$$ I_{|V|\times|E|} :=
+\begin{cases} 
+I_{ij}=+1 \mbox{ if edge j arrives at vertice i}\\
+I_{ij}=-1 \mbox{ if edge j leaves from vertice i}\\
+I_{ij}=0 \mbox{ if edge j don't touch vertice i}\\
+\end{cases}$$
+\end{definition}
+
+Now, given the directed multi-graph $G(V,E)$ modelling a circuit $\mathcal{C}$, are uniquely defined the incidence matrix $A=I(G)$, the branch voltage vector $\vec{v}$, the branch current vector $\vec{i}$ and the node potentials vector $\vec{p}$.
+
+With linear algebra approach, we formulate the Kirchhoff's Current Law with matrix operations:
+\begin{theorem}[KCL]
+\label{KCL:matrix}
+$$A\vec{i} = \vec{0}$$
+\end{theorem}
+\begin{proof}
+Considering the algebraic sum of currents (positive currents enter the node and negative currents leave the node), then KCL in the k-th node gives:
+$$(A\vec{i})_k = \sum a_{kj}i_j = \sum_{entering} \vec{i}_x - \sum_{leaving} \vec{i}_y = 0 $$
+\end{proof}
+
+Besides the mathematical beauty of a simpler KCL, even more surprisingly is the observation that the Kirchhoff's Voltage Law follows directly from voltage vector definition.
+
+\begin{theorem}[KVL]
+\label{KVL:matrix}
+$$ A^T\vec{p}=-\vec{v} \Rightarrow \mbox{KVL}  $$
+\end{theorem}
+\begin{proof}
+First we prove the linear equation. Let $b=(u,v)$ be the k-th edge, going from $u$ to $v$:
+$$(A^T\vec{p})_k = \sum a_{jk}p_j = \vec{p}_u - \vec{p}_v = \vec{v}_b = v_k$$
+Now, any cyclic path results in a null linear combination in the column space of $A^T$. Hence, the voltage drop of the path is a null combinations of the node potentials along the path:
+$$ \sum_{cyclic}v_k = - \sum_{cyclic} (A^T\vec{p})_k $$
+\end{proof}
+
+In order to use the Generalized Ohm's Law we must separate the voltage and current sources from the circuit. We can do this by defining the voltage drop vector $\vec{v}_{d}$ and voltage source contribution vector $\vec{v}_{s}$. In a similar fashion we define $\vec{i}_{d}$ and $\vec{i}_{s}$ so that:
+$$ \vec{v} = \vec{v}_{d} - \vec{v}_{s}$$
+$$ \vec{i} = \vec{i}_{d} +  \vec{i}_{s}$$
+
+And now we can securely state the Generalized Ohm's Law:
+\begin{axiom}[GOL]
+\label{GOL:matrix}
+$$ \vec{v}_{d} = Z \vec{i}_{d} $$
+\end{axiom}
+
+Combining \ref{KCL:matrix}, \ref{KVL:matrix} and \ref{GOL:matrix} we have the complete linear description of the system:
+\begin{equation}
+\begin{bmatrix}
+	Z & A^T \\
+	A & 0   \\
+\end{bmatrix}
+\begin{bmatrix}
+	\vec{i}_d \\
+	\vec{p}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\vec{v}_s \\
+	\vec{i}_s
+\end{bmatrix}
+\end{equation}
+
+The incredulous reader may expand the equation as follows:
+$$ Z\vec{i}_d + A^T\vec{p} = \vec{v}_d - \vec{v} = \vec{v}_s $$
+$$ A\vec{i}_d =  $$
 
 \section{Numerical Examples}
 

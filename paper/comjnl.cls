@@ -12,8 +12,8 @@
 \DeclareOption{mathptm}{%
   \def\CJ@fonts{\RequirePackage{times,mathptm}}}
 \DeclareOption{mathtime}{%
-  \def\CJ@fonts{\RequirePackage{times,mathtime}}}     %use for Mac
-%  \def\CJ@fonts{\RequirePackage{times,mathtimy}}}    %use for PC
+%  \def\CJ@fonts{\RequirePackage{times,mathtime}}}     %use for Mac
+  \def\CJ@fonts{\RequirePackage{times,mathtimy}}}    %use for PC
 \DeclareOption{cmfonts}{%
   \let\CJ@fonts\relax}
 \DeclareOption{epsfig}{\AtEndOfClass{\RequirePackage{epsfig}}}

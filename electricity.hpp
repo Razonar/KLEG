@@ -3,68 +3,83 @@
 
 #include <complex>
 #include "graph.hpp"
+#include "digraph.hpp"
+#include "equiv.hpp"
 
-class RLC {
-private:
+enum ec_type {RLC,vsource,csource};
+
+class electrical_component {
+protected:
+    ec_type type;
     complex<double> admittance;
-public:
-    RLC(double ir, double ii):admittance(ir,ii){}
-};
-
-class resistor : public RLC {
-private:
-
-public:
-    resistor(double r):RLC(1/r,0){}
-};
-
-    enum s_type {current,voltage};
-
-class source {
-private:
-    s_type source_type;
     double amplitude;
     double frequency;
     double phase;
-public:
-    source(double a, double f, double p):amplitude(a),frequency(f),phase(p){}
 };
 
-class voltage_source : source {
-private:
-    double amplitude;
-    double frequency;
-    double phase;
+class resistor : public electrical_component {
 public:
-    voltage_source(double a, double f=0, double p=0):source(a,f,p){}
+    resistor(int resistance)
+    {
+        type = RLC;
+        admittance.real()= 1/resistance;
+        admittance.imag()= 0;
+        amplitude = frequency = phase = 0;
+    }
 };
 
-class wire {
-
+class battery : public electrical_component {
+public:
+    battery(double amp, double freq=0, double ph=0)
+    {
+        type = vsource;
+        amplitude = amp;
+        frequency = freq;
+        phase = ph;
+        admittance.real() = admittance.imag() = 0;
+    }
 };
 
 class circuit {
 private:
-    graph< complex<double> , RLC >  RLCgraph;
-    vector< vector<int> >           equivalence_table;
-    vector< edge<source> >          sources;
-    vector< edge<wire> >            wires;
+    graph<char,electrical_component> circuit_graph;
+    digraph< complex<double>,complex<double> > modelled_graph;
 public:
     int nComponents();
-    void addRLC(int,int,double,double);
-    void addSource(int,int,double,double,double);
+    bool goodCircuit();
+    void addComponent(int,int,int,electrical_component);
+    void buildModel();
+    void solveSystem();
 };
-
 
 /*===================================================================================================================*/
 
 int circuit::nComponents()
-{ return RLCgraph.nEdges() + sources.size() + wires.size(); }
+{ return circuit_graph.nEdges(); }
 
-void circuit::addRLC(int e1, int e2, double G, double B)
-{ RLCgraph.addEdge(e1,e2,RLC(G,B)); }
+bool circuit::goodCircuit()
+{
+    matrix<int> adj2 = circuit_graph.adjacency_matrix();
+    adj2 = adj2*adj2;
+    for(int i=0;i<circuit_graph.nVertices();i++) if(adj2(i,i)<2) return false;
+    return circuit_graph.isConnected();
+}
 
+void circuit::addComponent(int id, int e1, int e2,electrical_component EC)
+{
+    if(!circuit_graph.verticeIsHere(e1)) circuit_graph.addVertice(e1);
+    if(!circuit_graph.verticeIsHere(e2)) circuit_graph.addVertice(e2);
+    circuit_graph.addEdge(id,e1,e2,EC);
+}
 
+void circuit::buildModel()
+{
 
+}
+
+void circuit::solveSystem()
+{
+
+}
 
 #endif // ELECTRICITY_HPP
