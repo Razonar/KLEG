@@ -1,3 +1,7 @@
+/*==========================================*\
+|  Copyright 2014 Victor Villas Bôas Chaves  |
+\*==========================================*/
+
 #include <iostream>
 using namespace std;
 

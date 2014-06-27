@@ -3,7 +3,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 
-%\copyrightyear{2014} \vol{00} \issue{0} \DOI{000}
+%Copyright 2014 Victor Villas Bôas Chaves
 
 \begin{document}
 
@@ -57,7 +57,7 @@ The Ohm's Law in the complex form gives the relation between the voltage and the
 \begin{axiom}[Ohm]
 $$V = ZI $$
 \end{axiom}
-where $V$ is the voltage on the terminals of an electrical component, $I$ is the current passing through it and $Z$ is the impedance associated with the component. 
+where $V$ is the voltage of an electrical component, $I$ is the current passing through it and $Z$ is the impedance associated with the component. 
 
 Of course these relations are the model of the circuit properties, but we need behaviour laws so we can predict the properties of a given circuit. These laws can be intuitively deduced from energy conservation principles: nodes do not leak or storage charges and cyclic paths can't generate work.
 
@@ -115,16 +115,21 @@ Now, any cyclic path results in a null linear combination in the column space of
 $$ \sum_{cyclic}v_k = - \sum_{cyclic} (A^T\vec{p})_k  = - \sum_{cyclic} (A^T)_k \cdot \vec{p} = \vec{0} \cdot \vec{p} = 0$$
 \end{proof}
 
-In order to use the Generalized Ohm's Law we must separate the voltage and current sources from the circuit. We can do this by defining the voltage drop vector $\vec{v}_{d}$ and voltage source contribution vector $\vec{v}_{s}$. In a similar fashion we define $\vec{i}_{d}$ and $\vec{i}_{s}$ so that:
+In order to use the Generalized Ohm's Law we must separate the voltage and current sources from the circuit. We can do this by defining the voltage drop vector $\vec{v}_{d}$ and voltage source contribution vector $\vec{v}_{s}$. In a similar fashion we define $\vec{i}_{s}$ as the current sources contribution vector and $\vec{i}_{d}$ so that:
 $$ \vec{v} = \vec{v}_{d} - \vec{v}_{s}$$
 $$ \vec{i} = \vec{i}_{d} +  \vec{i}_{s}$$
 
 And now we can securely state the Generalized Ohm's Law:
-\begin{axiom}[GOL]
+\begin{theorem}[GOL]
 \label{GOL:matrix}
 $$ \vec{v}_{d} = Z \vec{i}_{d} $$
-\end{axiom}
-
+where $Z$ is the impedance matrix:
+$$ Z_{|E|\times|E|} :=
+\begin{cases} 
+Z_{jj} \mbox{ is the impedance on branch j}\\
+Z_{ij}=0 \mbox{, if } i\neq j \\
+\end{cases}$$
+\end{theorem}
 Combining \ref{KCL:matrix}, \ref{KVL:matrix} and \ref{GOL:matrix} we have the complete linear description of the system:
 \begin{equation}
 \begin{bmatrix}
@@ -138,13 +143,13 @@ Combining \ref{KCL:matrix}, \ref{KVL:matrix} and \ref{GOL:matrix} we have the co
 =
 \begin{bmatrix}
 	\vec{v}_s \\
-	\vec{i}_s
+	-A\vec{i}_s
 \end{bmatrix}
 \end{equation}
 
 The incredulous reader may expand the equation as follows:
 $$ Z\vec{i}_d + A^T\vec{p} = \vec{v}_d - \vec{v} = \vec{v}_s $$
-$$ A\vec{i}_d = \wrong $$
+$$ A\vec{i}_d = A(\vec{i}-\vec{i}_s) = - A\vec{i}_s  $$
 % Finish this before restart doing the implementation
 
 \section{Numerical Examples}
