@@ -35,7 +35,11 @@ Graphs and circuits are so closely related that an undergraduate course about el
 \section{Introduction}
 \label{Sec:Intro}
 
-%By it's very definition, electrical circuits can be well modelled by graphs. The vertices may carry the nodes with voltage information if we set a ground referential and the edges may represent the electrical components, carrying their impedance.
+By it's very definition, electrical networks can be modelled by graphs. The visual similarity may suggest that we model electrical nodes with graph nodes and electrical components within graph edges.
+
+But a big part of the information required to solve a electric circuit network problem relies on the branch currents and branch voltage drops, and graphs usually tend to put most of the information on the nodes. It is understandable that many people think first in modelling electrical components within graph nodes and the relation "shares a node on the circuit" with graph edges.
+
+There is no such a thing as "the correct model", only "useful model". In this paper we shall see how useful is the visually intuitive model, where most of the information is on the graph's edges. Mathematical formality in graphs are not required, 
 
 \section{Let there be Vectors and Laws}
 Let $\mathcal{C}$ be an electrical circuit network of $n$ nodes and $m$ branches containing electrical connections, e.g. wires, resistors and batteries. Each node has an electrical potential, and each branch is associated with the potential difference between it's terminals and the current which goes through the electrical component in the branch.
