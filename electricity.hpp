@@ -7,9 +7,9 @@
 enum ec_type {RLC,vsource,csource};
 
 class electrical_component {
-protected:
+public:
     ec_type type;
-    complex<double> admittance;
+    complex<double> impedance;
     double amplitude;
     double frequency;
     double phase;
@@ -20,8 +20,8 @@ public:
     resistor(int resistance)
     {
         type = RLC;
-        admittance.real()= 1/resistance;
-        admittance.imag()= 0;
+        impedance.real()= resistance;
+        impedance.imag()= 0;
         amplitude = frequency = phase = 0;
     }
 };
@@ -34,19 +34,34 @@ public:
         amplitude = amp;
         frequency = freq;
         phase = ph;
-        admittance.real() = admittance.imag() = 0;
+        impedance.real() = impedance.imag() = 0;
     }
 };
 
 class circuit {
-private:
-    graph<char,electrical_component> circuit_graph;
 public:
+    graph<int,electrical_component> circuit_graph;
+
     int nComponents();
     bool goodCircuit();
     void addComponent(int,int,int,electrical_component);
-    void buildModel();
-    void solveSystem();
+};
+
+class solver {
+public:
+    matrix< complex<double> > M;
+    matrix< complex<double> > Z;
+    matrix< complex<double> > A;
+    matrix< complex<double> > p;
+    matrix< complex<double> > v_d;
+    matrix< complex<double> > v_s;
+    matrix< complex<double> > i_d;
+    matrix< complex<double> > i_s;
+
+    void getImpedance(circuit);
+    void getIncidence(circuit);
+    void getSources(circuit);
+
 };
 
 /*===================================================================================================================*/
@@ -69,13 +84,33 @@ void circuit::addComponent(int id, int e1, int e2,electrical_component EC)
     circuit_graph.addEdge(id,e1,e2,EC);
 }
 
-void circuit::buildModel()
+void solver::getImpedance(circuit C)
 {
-
+    int N = C.nComponents();
+    Z = matrix< complex<double> >(N,N);
+    for(int i=0; i<N; i++) Z(i,i) = C.circuit_graph.edges[i].link.impedance;
 }
 
-void circuit::solveSystem()
+void solver::getIncidence(circuit C)
+{ A=C.circuit_graph.incidence_matrix(); }
+
+void solver::getSources(circuit C)
 {
+    int N = C.nComponents();
+    v_s = matrix<complex<double> >(N,1);
+    i_s = matrix<complex<double> >(N,1);
+    for(int i=0; i<N; i++)
+    {
+        if(C.circuit_graph.edges[i].link.type == vsource) v_s(i,1)=C.circuit_graph.edges[i].link.amplitude;
+        >> problem here
+        if(C.circuit_graph.edges[i].link.type == csource) i_s(i,1)=C.circuit_graph.edges[i].link.amplitude;
+    }
+}
+
+void solveSystem()
+{
+    if(0) throw "Circuit is not well formed";
+
 
 }
 

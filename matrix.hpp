@@ -14,7 +14,7 @@ private:
     vector< vector<T> > entry;
     int nrows, ncols;
 public:
-              matrix(int r, int c);                                        // Constructor with null matrix by default
+              matrix(int r=1, int c=1);                                        // Constructor with null matrix by default
     template <class U>
               matrix(matrix<U>);                                           // Constructor for implicit type conversion
     template <class U>

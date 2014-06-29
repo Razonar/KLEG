@@ -26,10 +26,10 @@ public:
 
 template < class V = int , class E = int >
 class graph {
-protected:
+public:
     vector< vertice<V> > vertices;
     vector< edge<E> > edges;
-public:
+
     int nEdges();
     int nVertices();
     void addVertice(int,V);                                 // Add vertice by it's info with default ID
