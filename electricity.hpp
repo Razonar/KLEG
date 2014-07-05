@@ -61,6 +61,7 @@ public:
     void getImpedance(circuit);
     void getIncidence(circuit);
     void getSources(circuit);
+    void solveCircuit(circuit);
 
 };
 
@@ -101,17 +102,19 @@ void solver::getSources(circuit C)
     i_s = matrix<complex<double> >(N,1);
     for(int i=0; i<N; i++)
     {
-        if(C.circuit_graph.edges[i].link.type == vsource) v_s(i,1)=C.circuit_graph.edges[i].link.amplitude;
-        >> problem here
-        if(C.circuit_graph.edges[i].link.type == csource) i_s(i,1)=C.circuit_graph.edges[i].link.amplitude;
+        if(C.circuit_graph.edges[i].link.type == vsource) v_s(i,0).real() = C.circuit_graph.edges[i].link.amplitude;
+        if(C.circuit_graph.edges[i].link.type == csource) i_s(i,0).real() = C.circuit_graph.edges[i].link.amplitude;
     }
 }
 
-void solveSystem()
+void solver::solveCircuit(circuit C)
 {
-    if(0) throw "Circuit is not well formed";
+    if(!C.goodCircuit()) throw "Circuit is not well formed";
+    getImpedance(C);
+    getIncidence(C);
+    getSources(C);
 
-
+    // Need to check sources frequencies, impedace depends on it
 }
 
 #endif // ELECTRICITY_HPP
